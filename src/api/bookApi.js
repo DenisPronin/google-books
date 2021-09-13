@@ -1,8 +1,8 @@
 import { queryGet } from './apiConfig';
 
-export default {
+const bookApi = {
   getBooksCollection (query, subject, orderBy) {
-    const q = subject ? `${query}+${subject}` : query;
+    const q = subject ? `${query}+subject:${subject}` : query;
     
     return queryGet(`/volumes`, {
       params: {
@@ -16,3 +16,5 @@ export default {
     return queryGet(`/volumes/${bookId}`)
   }
 }
+
+export default bookApi;

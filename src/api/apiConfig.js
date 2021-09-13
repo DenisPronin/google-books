@@ -6,6 +6,11 @@ const queryInstance = axios.create({
   baseURL: apiUrl
 });
 
+queryInstance.interceptors.response.use(
+  (response) => response.data
+);
+
+
 export const queryGet = function (url, config = {}) {
   return queryInstance.get(url, config);
 };
