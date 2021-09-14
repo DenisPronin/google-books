@@ -1,10 +1,13 @@
 import BooksList from '../components/books/BooksList';
+import { useContext } from 'react';
+import { BooksContext } from '../hooks/BooksContext';
 
-function HomePage ({books, total}) {
-  console.log({books, total});
+function HomePage () {
+  const booksData = useContext(BooksContext);
+  
   return (
     <div>
-      <BooksList books={books} total={total}/>
+      <BooksList books={booksData.books} total={booksData.total}/>
     </div>
   );
 }

@@ -2,15 +2,12 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import HomePage from './containers/HomePage';
 import BookPage from './containers/BookPage';
 
-function AppRouter ({books, total}) {
+function AppRouter () {
   return (
     <Router>
       <Switch>
         <Route path='/' exact>
-          <HomePage
-            books={books}
-            total={total}
-          />
+          <HomePage />
         </Route>
         
         <Route path='/book/:id' exact>

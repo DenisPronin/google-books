@@ -5,6 +5,7 @@ import Header from './components/layout/Header';
 import SearchForm from './components/search/SearchForm';
 import Content from './components/layout/Content';
 import bookApi from './api/bookApi';
+import { BooksContext } from './hooks/BooksContext';
 
 function App() {
   const [books, setBooks] = useState([]);
@@ -27,7 +28,9 @@ function App() {
             </Header>
   
             <Content>
-              <AppRouter books={books} total={total} />
+              <BooksContext.Provider value={{ books, total }}>
+                <AppRouter/>
+              </BooksContext.Provider>
             </Content>
           </Col>
         </Row>
