@@ -1,8 +1,7 @@
 import { Button, Col, Form, InputGroup, Row } from 'react-bootstrap';
-import bookApi from '../../api/bookApi';
 import { useState } from 'react';
 
-function SearchForm () {
+function SearchForm ({ onSearch }) {
   const [formState, setFormState] = useState({
     searchQuery: '',
     category: '',
@@ -15,12 +14,10 @@ function SearchForm () {
       [event.target.name]: event.target.value
     })
   };
-
-  const onSearch = () => {
+  
+  function handleSearch () {
     const { searchQuery, category, sorting } = formState;
-    bookApi.getBooksCollection(searchQuery, category, sorting).then((response) => {
-      console.log(response);
-    });
+    onSearch(searchQuery, category, sorting);
   }
   
   return (
@@ -33,7 +30,7 @@ function SearchForm () {
               name='searchQuery'
               onChange={onChangeForm}
             />
-            <Button variant="outline-secondary" onClick={onSearch}>
+            <Button variant="outline-secondary" onClick={handleSearch}>
               Search
             </Button>
           </InputGroup>

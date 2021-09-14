@@ -1,6 +1,11 @@
-function HomePage () {
+import BooksList from '../components/books/BooksList';
+
+function HomePage ({books, total}) {
+  console.log({books, total});
   return (
-    <div>home</div>
+    <div>
+      <BooksList books={books} total={total}/>
+    </div>
   );
 }
 

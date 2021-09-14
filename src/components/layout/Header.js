@@ -1,6 +1,6 @@
 function Header (props) {
   return (
-    <header>
+    <header className='mb-4'>
       <h1>Search for books</h1>
       
       {props.children}
