@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import AppRouter from './AppRouter';
 import Header from './components/layout/Header';
@@ -31,11 +31,23 @@ function App() {
     bookApi.getBooksCollection(searchQuery, category, sorting, startIndex)
       .then((response) => {
         const prevBooks = startIndex > 0 ? books : [];
-        setBooks(prevBooks.concat(response.items));
+        if (response.items) {
+          setBooks(prevBooks.concat(response.items));
+        }
         setTotal(response.totalItems);
         setIsLoading(false);
       });
-  }
+  };
+  
+  const didMount = useRef(false);
+  
+  useEffect(() => {
+    if (didMount.current) {
+      onSearch(0);
+    } else {
+      didMount.current = true;
+    }
+  }, [searchFormState.category, searchFormState.sorting]);
   
   const loadMore = () => {
     onSearch(books.length);
