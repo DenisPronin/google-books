@@ -1,0 +1,15 @@
+.no-book-preview {
+  height: 487px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.book-link {
+  text-decoration: none;
+  color: inherit;
+
+  &:hover {
+    color: inherit;
+  }
+}
