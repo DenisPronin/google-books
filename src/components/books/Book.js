@@ -27,7 +27,8 @@ function Book ({ book, isExtended }) {
         <Card.Subtitle>Categories: {categoriesList}</Card.Subtitle>
         {isExtended && <Card.Text dangerouslySetInnerHTML={{__html: description}} />}
       </Card.Body>
-    </Card>  );
+    </Card>
+  );
 }
 
 export default Book;

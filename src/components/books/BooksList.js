@@ -1,5 +1,6 @@
 import Book from './Book';
 import { Col, Row } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 function BooksList ({books, total}) {
   return (
@@ -10,7 +11,9 @@ function BooksList ({books, total}) {
         {books.map((book, i) => {
           return (
             <Col key={`book-${book.id}-${i}`}>
-              <Book book={book} isExtended={false} />
+              <Link to={`/book/${book.id}`} className='book-link'>
+                <Book book={book} isExtended={false} />
+              </Link>
             </Col>
           );
         })}
