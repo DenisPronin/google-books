@@ -6,6 +6,13 @@ function SearchForm ({ formState, onChangeForm, onSearch }) {
     onSearch(0);
   };
   
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      handleSearch();
+    }
+  };
+  
   return (
     <div>
       <Form>
@@ -15,6 +22,7 @@ function SearchForm ({ formState, onChangeForm, onSearch }) {
               value={formState.searchQuery}
               name='searchQuery'
               onChange={onChangeForm}
+              onKeyPress={handleKeyPress}
             />
             <Button variant="outline-secondary" onClick={handleSearch}>
               Search
