@@ -19,7 +19,11 @@ function BookPage () {
   
   return (
     <div>
-      {isLoading && <Loader />}
+      {isLoading && (
+        <div className='d-flex justify-content-center mt-5'>
+          <Loader />
+        </div>
+      )}
       
       {book && !isLoading && (
         <Book book={book} isExtended/>

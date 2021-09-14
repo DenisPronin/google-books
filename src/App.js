@@ -12,13 +12,33 @@ function App() {
   const [books, setBooks] = useState([]);
   const [total, setTotal] = useState(0);
   
-  const onSearch = (searchQuery, category, sorting) => {
+  const [searchFormState, setSearchFormState] = useState({
+    searchQuery: '',
+    category: '',
+    sorting: 'relevance'
+  });
+  
+  const onChangeSearchForm = (event) => {
+    setSearchFormState({
+      ...searchFormState,
+      [event.target.name]: event.target.value
+    })
+  };
+  
+  const onSearch = (startIndex = 0) => {
+    const {searchQuery, category, sorting} = searchFormState;
     setIsLoading(true);
-    bookApi.getBooksCollection(searchQuery, category, sorting).then((response) => {
-      setBooks(response.items);
-      setTotal(response.totalItems);
-      setIsLoading(false);
-    });
+    bookApi.getBooksCollection(searchQuery, category, sorting, startIndex)
+      .then((response) => {
+        const prevBooks = startIndex > 0 ? books : [];
+        setBooks(prevBooks.concat(response.items));
+        setTotal(response.totalItems);
+        setIsLoading(false);
+      });
+  }
+  
+  const loadMore = () => {
+    onSearch(books.length);
   }
   
   return (
@@ -27,11 +47,20 @@ function App() {
         <Row>
           <Col>
             <Header>
-              <SearchForm onSearch={onSearch}/>
+              <SearchForm
+                formState={searchFormState}
+                onChangeForm={onChangeSearchForm}
+                onSearch={onSearch}
+              />
             </Header>
   
             <Content>
-              <BooksContext.Provider value={{ books, total, isLoading }}>
+              <BooksContext.Provider value={{
+                books,
+                total,
+                isLoading,
+                loadMore
+              }}>
                 <AppRouter/>
               </BooksContext.Provider>
             </Content>

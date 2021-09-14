@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 function BooksList ({books, total}) {
   return (
-    <div className='text-center'>
+    <div>
       {total > 0 && (
         <h4 className='mb-3'>Found {total} results</h4>
       )}

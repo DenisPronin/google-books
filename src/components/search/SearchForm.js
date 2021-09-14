@@ -1,24 +1,10 @@
 import { Button, Col, Form, InputGroup, Row } from 'react-bootstrap';
-import { useState } from 'react';
 
-function SearchForm ({ onSearch }) {
-  const [formState, setFormState] = useState({
-    searchQuery: '',
-    category: '',
-    sorting: 'relevance'
-  });
+function SearchForm ({ formState, onChangeForm, onSearch }) {
   
-  const onChangeForm = (event) => {
-    setFormState({
-      ...formState,
-      [event.target.name]: event.target.value
-    })
+  const handleSearch = () => {
+    onSearch(0);
   };
-  
-  function handleSearch () {
-    const { searchQuery, category, sorting } = formState;
-    onSearch(searchQuery, category, sorting);
-  }
   
   return (
     <div>

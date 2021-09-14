@@ -1,13 +1,14 @@
 import { queryGet } from './apiConfig';
 
 const bookApi = {
-  getBooksCollection (query, subject, orderBy) {
+  getBooksCollection (query, subject, orderBy, startIndex) {
     const q = subject ? `${query}+subject:${subject}` : query;
     
     return queryGet(`/volumes`, {
       params: {
         q,
-        orderBy
+        orderBy,
+        startIndex
       }
     })
   },
