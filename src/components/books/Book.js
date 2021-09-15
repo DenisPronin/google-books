@@ -1,16 +1,14 @@
 import { Card } from 'react-bootstrap';
+import useBookProps from './useBookProps';
 
-function Book ({ book, isExtended }) {
-  const { volumeInfo } = book;
-  const { title, authors = [], categories = [], description } = volumeInfo;
-  const imageLink = volumeInfo.imageLinks?.thumbnail;
-  
-  const authorsList = authors.join(', ');
-  
-  let categoriesList = categories[0] || '';
-  if (isExtended) {
-    categoriesList = categories.join(', ');
-  }
+function Book ({ book }) {
+  const bookProps = useBookProps(book, false);
+  const {
+    title,
+    imageLink,
+    authorsList,
+    categoriesList
+  } = bookProps;
   
   return (
     <Card className='book'>
@@ -25,7 +23,6 @@ function Book ({ book, isExtended }) {
         <Card.Title>{title}</Card.Title>
         <Card.Subtitle>Authors: {authorsList}</Card.Subtitle>
         <Card.Subtitle>Categories: {categoriesList}</Card.Subtitle>
-        {isExtended && <Card.Text dangerouslySetInnerHTML={{__html: description}} />}
       </Card.Body>
     </Card>
   );

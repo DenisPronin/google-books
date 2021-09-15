@@ -14,7 +14,7 @@ function BooksList ({books, total}) {
           return (
             <Col key={`book-${book.id}-${i}`} className='d-flex align-items-stretch'>
               <Link to={`/book/${book.id}`} className='hide-link-decoration'>
-                <Book book={book} isExtended={false} />
+                <Book book={book} />
               </Link>
             </Col>
           );

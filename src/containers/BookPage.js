@@ -1,8 +1,8 @@
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import bookApi from '../api/bookApi';
-import Book from '../components/books/Book';
 import Loader from '../components/common/Loader';
+import BookDetail from '../components/books/BookDetail';
 
 function BookPage () {
   const { id } = useParams();
@@ -26,7 +26,7 @@ function BookPage () {
       )}
       
       {book && !isLoading && (
-        <Book book={book} isExtended/>
+        <BookDetail book={book}/>
       )}
     </div>
   );

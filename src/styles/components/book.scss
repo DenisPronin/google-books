@@ -14,5 +14,9 @@ $image-height: 380px;
     height: $image-height;
     object-fit: cover;
   }
+
+  .card-subtitle {
+    margin-top: 0;
+  }
 }
 
