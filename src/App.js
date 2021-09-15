@@ -22,23 +22,32 @@ function App() {
     setSearchFormState({
       ...searchFormState,
       [name]: value
-    })
+    });
   };
   
-  const onSearch = useCallback((startIndex = 0) => {
+  const onSearch = useCallback(async (startIndex = 0) => {
     const {searchQuery, category, sorting} = searchFormState;
+    if (searchQuery === '') {
+      // TODO show error about empty query
+      return false;
+    }
+    
     setIsLoading(true);
-    bookApi.getBooksCollection(searchQuery, category, sorting, startIndex)
-      .then((response) => {
-        if (response.items) {
-          setBooks((prevBooks) => {
-            const booksArr = startIndex > 0 ? prevBooks : [];
-            return booksArr.concat(response.items);
-          });
-        }
-        setTotal(response.totalItems);
-        setIsLoading(false);
+    if (startIndex === 0) {
+      setBooks([]);
+    }
+    
+    const response = await bookApi.getBooksCollection(searchQuery, category, sorting, startIndex)
+
+    if (response.items) {
+      setBooks((prevBooks) => {
+        const booksArr = startIndex > 0 ? prevBooks : [];
+        return booksArr.concat(response.items);
       });
+    }
+    
+    setTotal(response.totalItems);
+    setIsLoading(false);
   }, [searchFormState]);
   
   const didMount = useRef(false);
