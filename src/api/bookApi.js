@@ -1,4 +1,5 @@
 import { queryGet } from './apiConfig';
+import { gApiKey } from './keys.local';
 
 const bookApi = {
   getBooksCollection (query, subject, orderBy, startIndex) {
@@ -8,13 +9,18 @@ const bookApi = {
       params: {
         q,
         orderBy,
-        startIndex
+        startIndex,
+        key: gApiKey
       }
     })
   },
   
   getBook (bookId) {
-    return queryGet(`/volumes/${bookId}`)
+    return queryGet(`/volumes/${bookId}`, {
+      params: {
+        key: gApiKey
+      }
+    })
   }
 }
 
