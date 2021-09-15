@@ -6,8 +6,10 @@ import SearchForm from './components/search/SearchForm';
 import Content from './components/layout/Content';
 import bookApi from './api/bookApi';
 import { BooksContext } from './hooks/BooksContext';
+import { useHistory } from 'react-router-dom';
 
 function App() {
+  const history = useHistory();
   const [isLoading, setIsLoading] = useState(false);
   const [books, setBooks] = useState([]);
   const [total, setTotal] = useState(0);
@@ -48,7 +50,11 @@ function App() {
     
     setTotal(response.totalItems);
     setIsLoading(false);
-  }, [searchFormState]);
+    
+    if (history.location.pathname !== '/') {
+      history.push('/');
+    }
+  }, [history, searchFormState]);
   
   const didMount = useRef(false);
   
