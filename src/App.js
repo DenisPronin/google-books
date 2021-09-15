@@ -20,6 +20,12 @@ function App() {
     sorting: 'relevance'
   });
   
+  const [searchError, setSearchError] = useState('');
+  
+  const clearSearchError = () => {
+    setSearchError('');
+  };
+  
   const onChangeSearchForm = (name, value) => {
     setSearchFormState({
       ...searchFormState,
@@ -28,31 +34,37 @@ function App() {
   };
   
   const onSearch = useCallback(async (startIndex = 0) => {
-    const {searchQuery, category, sorting} = searchFormState;
-    if (searchQuery === '') {
-      // TODO show error about empty query
-      return false;
-    }
-    
-    setIsLoading(true);
-    if (startIndex === 0) {
-      setBooks([]);
-    }
-    
-    const response = await bookApi.getBooksCollection(searchQuery, category, sorting, startIndex)
-
-    if (response.items) {
-      setBooks((prevBooks) => {
-        const booksArr = startIndex > 0 ? prevBooks : [];
-        return booksArr.concat(response.items);
-      });
-    }
-    
-    setTotal(response.totalItems);
-    setIsLoading(false);
-    
-    if (history.location.pathname !== '/') {
-      history.push('/');
+    try {
+      const {searchQuery, category, sorting} = searchFormState;
+      if (searchQuery === '') {
+        setSearchError('Search query is required!');
+        return false;
+      }
+  
+      setIsLoading(true);
+      if (startIndex === 0) {
+        setBooks([]);
+      }
+  
+      const response = await bookApi.getBooksCollection(searchQuery, category, sorting, startIndex)
+  
+      if (response.items) {
+        setBooks((prevBooks) => {
+          const booksArr = startIndex > 0 ? prevBooks : [];
+          return booksArr.concat(response.items);
+        });
+      }
+  
+      setTotal(response.totalItems);
+      setSearchError('');
+      setIsLoading(false);
+  
+      if (history.location.pathname !== '/') {
+        history.push('/');
+      }
+    } catch (error) {
+      setSearchError('Something going wrong!');
+      setIsLoading(false);
     }
   }, [history, searchFormState]);
   
@@ -88,7 +100,9 @@ function App() {
                 books,
                 total,
                 isLoading,
-                loadMore
+                searchError,
+                loadMore,
+                clearSearchError
               }}>
                 <AppRouter/>
               </BooksContext.Provider>

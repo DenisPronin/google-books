@@ -1,11 +1,28 @@
 import { useContext } from 'react';
-import { Button } from 'react-bootstrap';
+import { Alert, Button } from 'react-bootstrap';
 import { BooksContext } from '../hooks/BooksContext';
 import BooksList from '../components/books/BooksList';
 import Loader from '../components/common/Loader';
 
 function HomePage () {
-  const { books, total, isLoading, loadMore } = useContext(BooksContext);
+  const {
+    books,
+    total,
+    isLoading,
+    searchError,
+    loadMore,
+    clearSearchError
+  } = useContext(BooksContext);
+  
+  if (searchError) {
+    return (
+      <div className='mb-5'>
+        <Alert variant='danger' dismissible onClose={clearSearchError}>
+          {searchError}
+        </Alert>
+      </div>
+    );
+  }
   
   return (
     <div className='mb-5'>
