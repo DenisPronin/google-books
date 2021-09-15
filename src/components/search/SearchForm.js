@@ -1,9 +1,19 @@
 import { Button, Col, Form, InputGroup, Row } from 'react-bootstrap';
+import { useState } from 'react';
 
 function SearchForm ({ formState, onChangeForm, onSearch }) {
+  const [searchQuery, setSearchQuery] = useState('');
+  
+  const onChangeQuery = (event) => {
+    setSearchQuery(event.target.value);
+  };
+  
+  const handleChangeForm = (event) => {
+    onChangeForm(event.target.name, event.target.value);
+  };
   
   const handleSearch = () => {
-    onSearch(0);
+    onChangeForm('searchQuery', searchQuery);
   };
   
   const handleKeyPress = (event) => {
@@ -19,9 +29,9 @@ function SearchForm ({ formState, onChangeForm, onSearch }) {
         <Form.Group className="mb-3" controlId="search">
           <InputGroup>
             <Form.Control
-              value={formState.searchQuery}
+              value={searchQuery}
               name='searchQuery'
-              onChange={onChangeForm}
+              onChange={onChangeQuery}
               onKeyPress={handleKeyPress}
             />
             <Button variant="outline-secondary" onClick={handleSearch}>
@@ -35,7 +45,7 @@ function SearchForm ({ formState, onChangeForm, onSearch }) {
             <Form.Select
               value={formState.category}
               name='category'
-              onChange={onChangeForm}
+              onChange={handleChangeForm}
             >
               <option value="">All</option>
               <option value="art">Art</option>
@@ -51,7 +61,7 @@ function SearchForm ({ formState, onChangeForm, onSearch }) {
             <Form.Select
               value={formState.sorting}
               name='sorting'
-              onChange={onChangeForm}
+              onChange={handleChangeForm}
             >
               <option value="relevance">Relevance</option>
               <option value="newest">Newest</option>

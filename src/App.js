@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import AppRouter from './AppRouter';
 import Header from './components/layout/Header';
@@ -18,26 +18,28 @@ function App() {
     sorting: 'relevance'
   });
   
-  const onChangeSearchForm = (event) => {
+  const onChangeSearchForm = (name, value) => {
     setSearchFormState({
       ...searchFormState,
-      [event.target.name]: event.target.value
+      [name]: value
     })
   };
   
-  const onSearch = (startIndex = 0) => {
+  const onSearch = useCallback((startIndex = 0) => {
     const {searchQuery, category, sorting} = searchFormState;
     setIsLoading(true);
     bookApi.getBooksCollection(searchQuery, category, sorting, startIndex)
       .then((response) => {
-        const prevBooks = startIndex > 0 ? books : [];
         if (response.items) {
-          setBooks(prevBooks.concat(response.items));
+          setBooks((prevBooks) => {
+            const booksArr = startIndex > 0 ? prevBooks : [];
+            return booksArr.concat(response.items);
+          });
         }
         setTotal(response.totalItems);
         setIsLoading(false);
       });
-  };
+  }, [searchFormState]);
   
   const didMount = useRef(false);
   
@@ -47,7 +49,7 @@ function App() {
     } else {
       didMount.current = true;
     }
-  }, [searchFormState.category, searchFormState.sorting]);
+  }, [onSearch, searchFormState]);
   
   const loadMore = () => {
     onSearch(books.length);
