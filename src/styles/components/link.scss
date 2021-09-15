@@ -1,0 +1,8 @@
+.hide-link-decoration {
+  text-decoration: none;
+  color: inherit;
+
+  &:hover {
+    color: inherit;
+  }
+}

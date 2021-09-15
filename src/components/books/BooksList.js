@@ -13,7 +13,7 @@ function BooksList ({books, total}) {
         {books.map((book, i) => {
           return (
             <Col key={`book-${book.id}-${i}`}>
-              <Link to={`/book/${book.id}`} className='book-link'>
+              <Link to={`/book/${book.id}`} className='hide-link-decoration'>
                 <Book book={book} isExtended={false} />
               </Link>
             </Col>
