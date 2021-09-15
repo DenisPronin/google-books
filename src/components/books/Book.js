@@ -14,7 +14,7 @@ function Book ({ book, isExtended }) {
   
   return (
     <Card className='book'>
-      {imageLink && <Card.Img variant="top" src={imageLink} />}
+      {imageLink && <Card.Img variant="top" className='book-preview' src={imageLink} />}
       {!imageLink && (
         <div className='no-book-preview'>
           No preview

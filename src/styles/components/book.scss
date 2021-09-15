@@ -1,6 +1,18 @@
+$image-height: 380px;
+
 .no-book-preview {
-  height: 487px;
+  height: $image-height;
   display: flex;
   align-items: center;
   justify-content: center;
 }
+
+.book {
+  height: 100%;
+
+  .book-preview {
+    height: $image-height;
+    object-fit: cover;
+  }
+}
+
