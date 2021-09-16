@@ -7,6 +7,7 @@ import AppRouter from './AppRouter';
 import Header from './components/layout/Header';
 import SearchForm from './components/search/SearchForm';
 import Content from './components/layout/Content';
+import useError from './hooks/useError';
 
 function App() {
   const history = useHistory();
@@ -21,11 +22,7 @@ function App() {
     sorting: 'relevance'
   });
   
-  const [searchError, setSearchError] = useState('');
-  
-  const clearSearchError = () => {
-    setSearchError('');
-  };
+  const [searchError, setSearchError, clearSearchError] = useError();
   
   const onChangeSearchForm = (options) => {
     setSearchFormState({
@@ -67,7 +64,7 @@ function App() {
       setSearchError('Something going wrong!');
       setIsLoading(false);
     }
-  }, [history, searchFormState]);
+  }, [history, searchFormState, setSearchError]);
   
   const didMount = useRef(false);
   

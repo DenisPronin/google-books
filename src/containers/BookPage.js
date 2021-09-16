@@ -4,16 +4,13 @@ import bookApi from '../api/bookApi';
 import Loader from '../components/common/Loader';
 import BookDetail from '../components/books/BookDetail';
 import Error from '../components/common/Error';
+import useError from '../hooks/useError';
 
 function BookPage () {
   const { id } = useParams();
   const [isLoading, setIsLoading] = useState(false);
   const [book, setBook] = useState(null);
-  const [error, setError] = useState('');
-  
-  const clearError = () => {
-    setError('');
-  };
+  const [error, setError, clearError] = useError()
   
   useEffect(() => {
     const getBook = async () => {
@@ -31,7 +28,7 @@ function BookPage () {
     };
     
     getBook();
-  }, [id])
+  }, [id, setError])
   
   if (error) {
     return <Error error={error} clearError={clearError} />
