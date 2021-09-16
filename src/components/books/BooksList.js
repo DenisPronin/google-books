@@ -1,6 +1,6 @@
-import Book from './Book';
 import { Col, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import Book from './Book';
 
 function BooksList ({books, total}) {
   return (

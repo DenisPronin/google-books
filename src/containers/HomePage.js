@@ -1,8 +1,9 @@
 import { useContext } from 'react';
-import { Alert, Button } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { BooksContext } from '../hooks/BooksContext';
 import BooksList from '../components/books/BooksList';
 import Loader from '../components/common/Loader';
+import Error from '../components/common/Error';
 
 function HomePage () {
   const {
@@ -15,13 +16,7 @@ function HomePage () {
   } = useContext(BooksContext);
   
   if (searchError) {
-    return (
-      <div className='mb-5'>
-        <Alert variant='danger' dismissible onClose={clearSearchError}>
-          {searchError}
-        </Alert>
-      </div>
-    );
+    return <Error error={searchError} clearError={clearSearchError} />
   }
   
   return (

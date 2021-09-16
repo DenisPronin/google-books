@@ -1,21 +1,41 @@
-import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import bookApi from '../api/bookApi';
 import Loader from '../components/common/Loader';
 import BookDetail from '../components/books/BookDetail';
+import Error from '../components/common/Error';
 
 function BookPage () {
   const { id } = useParams();
   const [isLoading, setIsLoading] = useState(false);
   const [book, setBook] = useState(null);
+  const [error, setError] = useState('');
+  
+  const clearError = () => {
+    setError('');
+  };
   
   useEffect(() => {
-    setIsLoading(true);
-    bookApi.getBook(id).then((response) => {
-      setBook(response);
-      setIsLoading(false);
-    })
+    const getBook = async () => {
+      setIsLoading(true);
+      
+      try {
+        const response = await bookApi.getBook(id);
+        setBook(response);
+        setIsLoading(false);
+      } catch (error) {
+        console.log(error);
+        setError('Something going wrong!')
+        setIsLoading(false);
+      }
+    };
+    
+    getBook();
   }, [id])
+  
+  if (error) {
+    return <Error error={error} clearError={clearError} />
+  }
   
   return (
     <div>
