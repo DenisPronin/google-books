@@ -13,7 +13,7 @@ function BookDetail ({ book }) {
   
   return (
     <Row className='book book--detail'>
-      <Col md={4} sm={1} cla ssName='mb-3'>
+      <Col md={4} sm={1} className='mb-3'>
         {imageLink && (
           <img className='book-preview' src={imageLink} alt={title} />
         )}

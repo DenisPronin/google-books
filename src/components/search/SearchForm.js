@@ -1,7 +1,7 @@
 import { Button, Col, Form, InputGroup, Row } from 'react-bootstrap';
 import { useState } from 'react';
 
-function SearchForm ({ formState, onChangeForm, onSearch }) {
+function SearchForm ({ formState, onChangeForm }) {
   const [searchQuery, setSearchQuery] = useState('');
   
   const onChangeQuery = (event) => {
@@ -9,11 +9,19 @@ function SearchForm ({ formState, onChangeForm, onSearch }) {
   };
   
   const handleChangeForm = (event) => {
-    onChangeForm(event.target.name, event.target.value);
+    const options = {
+      [event.target.name]: event.target.value
+    };
+  
+    if (formState.searchQuery !== searchQuery) {
+      options.searchQuery = searchQuery;
+    }
+    
+    onChangeForm(options);
   };
   
   const handleSearch = () => {
-    onChangeForm('searchQuery', searchQuery);
+    onChangeForm({ searchQuery });
   };
   
   const handleKeyPress = (event) => {

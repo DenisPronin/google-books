@@ -26,10 +26,10 @@ function App() {
     setSearchError('');
   };
   
-  const onChangeSearchForm = (name, value) => {
+  const onChangeSearchForm = (options) => {
     setSearchFormState({
       ...searchFormState,
-      [name]: value
+      ...options
     });
   };
   
@@ -91,7 +91,6 @@ function App() {
               <SearchForm
                 formState={searchFormState}
                 onChangeForm={onChangeSearchForm}
-                onSearch={onSearch}
               />
             </Header>
   
