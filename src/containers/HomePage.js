@@ -1,6 +1,5 @@
-import { useContext } from 'react';
 import { Button } from 'react-bootstrap';
-import { BooksContext } from '../hooks/BooksContext';
+import { useBooks } from '../hooks/BooksContext';
 import BooksList from '../components/books/BooksList';
 import Loader from '../components/common/Loader';
 import Error from '../components/common/Error';
@@ -13,7 +12,7 @@ function HomePage () {
     searchError,
     loadMore,
     clearSearchError
-  } = useContext(BooksContext);
+  } = useBooks();
   
   if (searchError) {
     return <Error error={searchError} clearError={clearSearchError} />

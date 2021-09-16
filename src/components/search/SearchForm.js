@@ -1,7 +1,13 @@
 import { useState } from 'react';
 import { Button, Col, Form, InputGroup, Row } from 'react-bootstrap';
+import { useSearchForm } from '../../hooks/SearchFormContext';
 
-function SearchForm ({ formState, onChangeForm }) {
+function SearchForm () {
+  const {
+    searchFormState: formState,
+    onChangeSearchForm: onChangeForm
+  } = useSearchForm();
+  
   const [searchQuery, setSearchQuery] = useState('');
   
   const onChangeQuery = (event) => {
