@@ -69,5 +69,4 @@ export const getBooks = (
   }
 }
 
-
 export default booksSlice.reducer;

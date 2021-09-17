@@ -1,5 +1,4 @@
 import { Col, Container, Row } from 'react-bootstrap';
-import { SearchFormProvider } from './hooks/SearchFormContext';
 import { BooksProvider } from './hooks/BooksContext';
 import AppRouter from './AppRouter';
 import Header from './components/layout/Header';
@@ -13,17 +12,15 @@ function App() {
       <Container>
         <Row>
           <Col>
-            <SearchFormProvider>
-              <BooksProvider>
-                <Header>
-                  <SearchForm/>
-                </Header>
-    
-                <Content>
-                  <AppRouter/>
-                </Content>
-              </BooksProvider>
-            </SearchFormProvider>
+            <BooksProvider>
+              <Header>
+                <SearchForm/>
+              </Header>
+  
+              <Content>
+                <AppRouter/>
+              </Content>
+            </BooksProvider>
           </Col>
         </Row>
       </Container>
