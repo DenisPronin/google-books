@@ -5,6 +5,7 @@ import AppRouter from './AppRouter';
 import Header from './components/layout/Header';
 import SearchForm from './components/search/SearchForm';
 import Content from './components/layout/Content';
+import Counter from './components/common/Counter';
 
 function App() {
   
@@ -20,6 +21,7 @@ function App() {
                 </Header>
     
                 <Content>
+                  <Counter />
                   <AppRouter/>
                 </Content>
               </BooksProvider>
