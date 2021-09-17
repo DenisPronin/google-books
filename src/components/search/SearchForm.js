@@ -1,12 +1,11 @@
 import { useState } from 'react';
 import { Button, Col, Form, InputGroup, Row } from 'react-bootstrap';
-import { useSearchForm } from '../../hooks/SearchFormContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { onChangeSearchForm } from '../../redux/modules/searchForm';
 
 function SearchForm () {
-  const {
-    searchFormState: formState,
-    onChangeSearchForm: onChangeForm
-  } = useSearchForm();
+  const dispatch = useDispatch();
+  const formState = useSelector(state => state.searchForm)
   
   const [searchQuery, setSearchQuery] = useState('');
   
@@ -23,11 +22,11 @@ function SearchForm () {
       options.searchQuery = searchQuery;
     }
     
-    onChangeForm(options);
+    dispatch(onChangeSearchForm(options));
   };
   
   const handleSearch = () => {
-    onChangeForm({ searchQuery });
+    dispatch(onChangeSearchForm({ searchQuery }));
   };
   
   const handleKeyPress = (event) => {

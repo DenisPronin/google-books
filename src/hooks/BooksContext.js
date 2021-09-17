@@ -1,8 +1,7 @@
-import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useSearchForm } from './SearchFormContext';
-import useError from './useError';
-import bookApi from '../api/bookApi';
+import { useDispatch, useSelector } from 'react-redux';
+import { getBooks } from '../redux/modules/books';
 
 export const BooksContext = React.createContext();
 
@@ -12,49 +11,20 @@ export const useBooks = () => {
 
 export const BooksProvider = ({ children }) => {
   const history = useHistory();
+  const dispatch = useDispatch();
   
-  const { searchFormState } = useSearchForm();
-  
-  const [searchError, setSearchError, clearSearchError] = useError();
-  
-  const [isLoading, setIsLoading] = useState(false);
-  const [books, setBooks] = useState([]);
-  const [total, setTotal] = useState(0);
+  const searchFormState = useSelector(state => state.searchForm)
+  const books = useSelector(state => state.books.books)
   
   const onSearch = useCallback(async (startIndex = 0) => {
-    try {
-      const {searchQuery, category, sorting} = searchFormState;
-      if (searchQuery === '') {
-        setSearchError('Search query is required!');
-        return false;
-      }
-      
-      setIsLoading(true);
-      if (startIndex === 0) {
-        setBooks([]);
-      }
-      
-      const response = await bookApi.getBooksCollection(searchQuery, category, sorting, startIndex)
-      
-      if (response.items) {
-        setBooks((prevBooks) => {
-          const booksArr = startIndex > 0 ? prevBooks : [];
-          return booksArr.concat(response.items);
-        });
-      }
-      
-      setTotal(response.totalItems);
-      setSearchError('');
-      setIsLoading(false);
-      
+    const {searchQuery, category, sorting} = searchFormState;
+
+    dispatch(getBooks(searchQuery, category, sorting, startIndex)).then(() => {
       if (history.location.pathname !== '/') {
         history.push('/');
       }
-    } catch (error) {
-      setSearchError('Something going wrong!');
-      setIsLoading(false);
-    }
-  }, [history, searchFormState, setSearchError]);
+    })
+  }, [dispatch, history, searchFormState]);
   
   const didMount = useRef(false);
   
@@ -72,11 +42,6 @@ export const BooksProvider = ({ children }) => {
   
   return (
     <BooksContext.Provider value={{
-      isLoading,
-      books,
-      total,
-      searchError,
-      clearSearchError,
       loadMore
     }}>
       {children}

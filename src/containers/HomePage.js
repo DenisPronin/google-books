@@ -3,19 +3,29 @@ import { useBooks } from '../hooks/BooksContext';
 import BooksList from '../components/books/BooksList';
 import Loader from '../components/common/Loader';
 import Error from '../components/common/Error';
+import { useDispatch, useSelector } from 'react-redux';
+import { setSearchError } from '../redux/modules/books';
 
 function HomePage () {
+  const dispatch = useDispatch();
+  
   const {
     books,
     total,
     isLoading,
     searchError,
-    loadMore,
-    clearSearchError
+  } = useSelector(state => state.books);
+  
+  const {
+    loadMore
   } = useBooks();
   
+  const onClearSearchError = () => {
+    dispatch(setSearchError(''));
+  };
+  
   if (searchError) {
-    return <Error error={searchError} clearError={clearSearchError} />
+    return <Error error={searchError} clearError={onClearSearchError} />
   }
   
   return (
