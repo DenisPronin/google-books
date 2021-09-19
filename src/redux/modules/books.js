@@ -1,5 +1,13 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import bookApi from '../../api/bookApi';
+
+export const getBookById = createAsyncThunk(
+  'books/getBookById',
+  async (bookId) => {
+    const response = await bookApi.getBook(bookId);
+    return response;
+  }
+)
 
 export const booksSlice = createSlice({
   name: 'books',
@@ -8,7 +16,12 @@ export const booksSlice = createSlice({
     searchError: '',
     isLoading: false,
     books: [],
-    total: 0
+    total: 0,
+    bookInfo: {
+      isLoading: false,
+      book: null,
+      error: ''
+    }
   },
   
   reducers: {
@@ -30,11 +43,31 @@ export const booksSlice = createSlice({
   
     setTotal: (state, { payload }) => {
       state.total = payload;
+    },
+    
+    setBooksInfoError: (state, { payload }) => {
+      state.bookInfo.error = payload;
     }
+  },
+  
+  extraReducers: (builder) => {
+    builder
+      .addCase(getBookById.pending, (state) => {
+        state.bookInfo.isLoading = true;
+      })
+      .addCase(getBookById.fulfilled, (state, action) => {
+        state.bookInfo.book = action.payload;
+        state.bookInfo.isLoading = false;
+        state.bookInfo.error = '';
+      })
+      .addCase(getBookById.rejected, (state, action) => {
+        state.bookInfo.isLoading = false;
+        state.bookInfo.error = 'Something going wrong!';
+      })
   }
 });
 
- export const { setSearchError, setIsLoading, setBooks, setTotal, clearBooks } = booksSlice.actions;
+export const { setSearchError, setIsLoading, setBooks, setTotal, clearBooks, setBooksInfoError } = booksSlice.actions;
 
 export const getBooks = () => async (dispatch, getState) => {
   try {

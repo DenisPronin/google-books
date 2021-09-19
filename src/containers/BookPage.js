@@ -1,34 +1,23 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import bookApi from '../api/bookApi';
+import { useDispatch, useSelector } from 'react-redux';
 import Loader from '../components/common/Loader';
 import BookDetail from '../components/books/BookDetail';
 import Error from '../components/common/Error';
-import useError from '../hooks/useError';
+import { getBookById, setBooksInfoError } from '../redux/modules/books';
 
 function BookPage () {
+  const dispatch = useDispatch();
   const { id } = useParams();
-  const [isLoading, setIsLoading] = useState(false);
-  const [book, setBook] = useState(null);
-  const [error, setError, clearError] = useError()
+  const { isLoading, book, error } = useSelector(state => state.books.bookInfo);
+  
+  const clearError = () => {
+    dispatch(setBooksInfoError(''));
+  }
   
   useEffect(() => {
-    const getBook = async () => {
-      setIsLoading(true);
-      
-      try {
-        const response = await bookApi.getBook(id);
-        setBook(response);
-        setIsLoading(false);
-      } catch (error) {
-        console.log(error);
-        setError('Something going wrong!')
-        setIsLoading(false);
-      }
-    };
-    
-    getBook();
-  }, [id, setError])
+    dispatch(getBookById(id));
+  }, [dispatch, id])
   
   if (error) {
     return <Error error={error} clearError={clearError} />
