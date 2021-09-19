@@ -1,24 +1,18 @@
 import { Button } from 'react-bootstrap';
-import { useBooks } from '../hooks/BooksContext';
+import { useDispatch, useSelector } from 'react-redux';
 import BooksList from '../components/books/BooksList';
 import Loader from '../components/common/Loader';
 import Error from '../components/common/Error';
-import { useDispatch, useSelector } from 'react-redux';
-import { setSearchError } from '../redux/modules/books';
+import { getBooks, setSearchError } from '../redux/modules/books';
 
 function HomePage () {
   const dispatch = useDispatch();
   
-  const {
-    books,
-    total,
-    isLoading,
-    searchError,
-  } = useSelector(state => state.books);
+  const { books, total, isLoading, searchError } = useSelector(state => state.books);
   
-  const {
-    loadMore
-  } = useBooks();
+  const loadMore = () => {
+    dispatch(getBooks());
+  }
   
   const onClearSearchError = () => {
     dispatch(setSearchError(''));

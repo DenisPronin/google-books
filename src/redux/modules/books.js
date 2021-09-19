@@ -23,6 +23,10 @@ export const booksSlice = createSlice({
     setBooks: (state, { payload }) => {
       state.books = payload;
     },
+    
+    clearBooks: (state) => {
+      state.books = [];
+    },
   
     setTotal: (state, { payload }) => {
       state.total = payload;
@@ -30,31 +34,24 @@ export const booksSlice = createSlice({
   }
 });
 
-export const { setSearchError, setIsLoading, setBooks, setTotal } = booksSlice.actions;
+ export const { setSearchError, setIsLoading, setBooks, setTotal, clearBooks } = booksSlice.actions;
 
-export const getBooks = (
-  searchQuery,
-  category,
-  sorting,
-  startIndex = 0
-) => async (dispatch, getState) => {
+export const getBooks = () => async (dispatch, getState) => {
   try {
+    const { books } = getState().books;
+    const {searchQuery, category, sorting} = getState().searchForm;
+
     if (searchQuery === '') {
       dispatch(setSearchError('Search query is required!'));
       return false;
     }
-  
+ 
     dispatch(setIsLoading(true));
-    if (startIndex === 0) {
-      dispatch(setBooks([]));
-    }
     
-    const response = await bookApi.getBooksCollection(searchQuery, category, sorting, startIndex);
+    const response = await bookApi.getBooksCollection(searchQuery, category, sorting, books.length);
     
     if (response.items) {
-      const { books } = getState().books;
-      let booksArr = startIndex > 0 ? books : [];
-      booksArr = booksArr.concat(response.items);
+      let booksArr = books.concat(response.items);
       dispatch(setBooks(booksArr));
     }
     

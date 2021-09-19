@@ -1,9 +1,12 @@
 import { useState } from 'react';
-import { Button, Col, Form, InputGroup, Row } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { Button, Col, Form, InputGroup, Row } from 'react-bootstrap';
 import { onChangeSearchForm } from '../../redux/modules/searchForm';
+import { clearBooks, getBooks } from '../../redux/modules/books';
 
 function SearchForm () {
+  const history = useHistory();
   const dispatch = useDispatch();
   const formState = useSelector(state => state.searchForm)
   
@@ -11,6 +14,16 @@ function SearchForm () {
   
   const onChangeQuery = (event) => {
     setSearchQuery(event.target.value);
+  };
+  
+  const onSearch = (options) => {
+    dispatch(onChangeSearchForm(options));
+    dispatch(clearBooks());
+    dispatch(getBooks()).then(() => {
+      if (history.location.pathname !== '/') {
+        history.push('/');
+      }
+    })
   };
   
   const handleChangeForm = (event) => {
@@ -22,11 +35,11 @@ function SearchForm () {
       options.searchQuery = searchQuery;
     }
     
-    dispatch(onChangeSearchForm(options));
+    onSearch(options);
   };
   
   const handleSearch = () => {
-    dispatch(onChangeSearchForm({ searchQuery }));
+    onSearch({ searchQuery });
   };
   
   const handleKeyPress = (event) => {
