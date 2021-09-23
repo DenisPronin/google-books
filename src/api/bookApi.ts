@@ -38,7 +38,7 @@ const bookApi = {
     })
   },
 
-  getBook (bookId: string) {
+  getBook (bookId: string): Promise<GoogleBook> {
     return queryGet(`/volumes/${bookId}`, {
       params: {
         key: gApiKey
