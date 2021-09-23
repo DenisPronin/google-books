@@ -6,7 +6,7 @@ interface ErrorProps {
   clearError: () => void
 }
 
-const Error: FC<ErrorProps>  = ({ error, clearError })  => {
+const Error: FC<ErrorProps> = ({ error, clearError })  => {
   return (
     <div className='mb-5'>
       <Alert variant='danger' dismissible onClose={clearError}>

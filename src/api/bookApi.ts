@@ -2,6 +2,7 @@ import { queryGet } from './apiConfig';
 import { gApiKey } from './keys.local';
 
 export interface GoogleBook {
+  id: string;
   volumeInfo: {
     title: string;
     description: string;
