@@ -1,21 +1,21 @@
+import { observer } from "mobx-react";
 import { Button } from 'react-bootstrap';
 import BooksList from '../components/books/BooksList';
 import Loader from '../components/common/Loader';
 import Error from '../components/common/Error';
-import { getBooks, setSearchError } from '../redux/modules/books';
-import {useAppDispatch, useAppSelector} from "../hooks/common";
+import BooksStore from "../stores/BooksStore";
+import SearchFormStore from "../stores/SearchFormStore";
 
-function HomePage () {
-  const dispatch = useAppDispatch();
-
-  const { books, total, isLoading, searchError } = useAppSelector(state => state.books);
+const HomePage = observer(() => {
+  const { books, total, isLoading, searchError } = BooksStore;
+  const { category, searchQuery, sorting } = SearchFormStore;
 
   const loadMore = () => {
-    dispatch(getBooks());
+    BooksStore.getBooks(searchQuery, category, sorting);
   }
 
   const onClearSearchError = () => {
-    dispatch(setSearchError(''));
+    BooksStore.setSearchError('');
   };
 
   if (searchError) {
@@ -38,6 +38,6 @@ function HomePage () {
       </div>
     </div>
   );
-}
+})
 
 export default HomePage;

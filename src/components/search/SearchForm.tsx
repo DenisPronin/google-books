@@ -1,29 +1,35 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { observer } from "mobx-react";
 import { Button, Col, Form, InputGroup, Row } from 'react-bootstrap';
-import {onChangeSearchForm, SearchFormOptions} from '../../redux/modules/searchForm';
-import { clearBooks, getBooks } from '../../redux/modules/books';
-import {useAppDispatch, useAppSelector} from "../../hooks/common";
+import SearchFormStore, { ISearchFormOptions } from "../../stores/SearchFormStore";
+import BooksStore from "../../stores/BooksStore";
+import {runInAction} from "mobx";
 
-function SearchForm () {
-  const history = useHistory();
-  const dispatch = useAppDispatch();
-  const formState = useAppSelector(state => state.searchForm)
+const SearchForm = observer(() => {
+  const { category, searchQuery, sorting } = SearchFormStore;
 
-  const [searchQuery, setSearchQuery] = useState('');
+  const [localSearchQuery, setLocalSearchQuery] = useState('');
 
   const onChangeQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(event.target.value);
+    setLocalSearchQuery(event.target.value);
   };
 
-  const onSearch = (options: SearchFormOptions) => {
-    dispatch(onChangeSearchForm(options));
-    dispatch(clearBooks());
-    dispatch(getBooks()).then(() => {
-      if (history.location.pathname !== '/') {
-        history.push('/');
-      }
-    })
+  const history = useHistory();
+
+  const onSearch = (options: ISearchFormOptions) => {
+    runInAction(() => {
+      SearchFormStore.onChangeSearchForm(options);
+    });
+    runInAction(() => {
+      BooksStore.clearBooks();
+      BooksStore.getBooks(SearchFormStore.searchQuery, SearchFormStore.category, SearchFormStore.sorting)
+        .then(() => {
+          if (history.location.pathname !== '/') {
+            history.push('/');
+          }
+        });
+    });
   };
 
   const handleChangeForm = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -31,15 +37,15 @@ function SearchForm () {
       [event.target.name]: event.target.value
     };
 
-    if (formState.searchQuery !== searchQuery) {
-      options.searchQuery = searchQuery;
+    if (searchQuery !== localSearchQuery) {
+      options.searchQuery = localSearchQuery;
     }
 
     onSearch(options);
   };
 
   const handleSearch = () => {
-    onSearch({ searchQuery });
+    onSearch({ searchQuery: localSearchQuery });
   };
 
   const handleKeyPress = (event: React.KeyboardEvent) => {
@@ -55,7 +61,7 @@ function SearchForm () {
         <Form.Group className="mb-3" controlId="search">
           <InputGroup>
             <Form.Control
-              value={searchQuery}
+              value={localSearchQuery}
               name='searchQuery'
               onChange={onChangeQuery}
               onKeyPress={handleKeyPress}
@@ -69,7 +75,7 @@ function SearchForm () {
         <Row>
           <Form.Group as={Col} controlId="categories">
             <Form.Select
-              value={formState.category}
+              value={category}
               name='category'
               onChange={handleChangeForm}
             >
@@ -85,7 +91,7 @@ function SearchForm () {
 
           <Form.Group as={Col} controlId="sorting">
             <Form.Select
-              value={formState.sorting}
+              value={sorting}
               name='sorting'
               onChange={handleChangeForm}
             >
@@ -98,6 +104,6 @@ function SearchForm () {
       </Form>
     </div>
   );
-}
+})
 
 export default SearchForm;

@@ -1,27 +1,26 @@
 import { useEffect } from 'react';
+import { observer } from "mobx-react";
 import { useParams } from 'react-router-dom';
 import Loader from '../components/common/Loader';
 import BookDetail from '../components/books/BookDetail';
 import Error from '../components/common/Error';
-import { getBookById, setBooksInfoError } from '../redux/modules/books';
-import {useAppDispatch, useAppSelector} from "../hooks/common";
+import BooksStore from "../stores/BooksStore";
 
 interface ParamTypes {
   id: string
 }
 
-function BookPage () {
-  const dispatch = useAppDispatch();
+const BookPage = observer(() => {
   const { id } = useParams<ParamTypes>();
-  const { isLoading, book, error } = useAppSelector(state => state.books.bookInfo);
+  const { bookInfo: { isLoading, book, error } } = BooksStore;
 
   const clearError = () => {
-    dispatch(setBooksInfoError(''));
+    BooksStore.setBooksInfoError('');
   }
 
   useEffect(() => {
-    dispatch(getBookById(id));
-  }, [dispatch, id])
+    BooksStore.getBookById(id);
+  }, [id])
 
   if (error) {
     return <Error error={error} clearError={clearError} />
@@ -40,6 +39,6 @@ function BookPage () {
       )}
     </div>
   );
-}
+});
 
 export default BookPage;
