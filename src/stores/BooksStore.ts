@@ -1,4 +1,4 @@
-import {makeAutoObservable} from "mobx";
+import {makeAutoObservable, runInAction} from "mobx";
 import bookApi, {GoogleBook, GoogleBooks} from "../api/bookApi";
 
 interface IBookInfo {
@@ -59,27 +59,40 @@ class Books implements IBooks {
         this.books.length
       );
 
-      if (response.items) {
-        this.books = this.books.concat(response.items);
-      }
+      runInAction(() => {
+        if (response.items) {
+          this.books = this.books.concat(response.items);
+        }
 
-      this.total = response.totalItems;
-      this.searchError = '';
-      this.isLoading = false;
+        this.total = response.totalItems;
+        this.searchError = '';
+        this.isLoading = false;
+      });
 
       return response;
     } catch (error) {
-      this.searchError = 'Something going wrong!';
-      this.isLoading = false;
+      runInAction(() => {
+        this.searchError = 'Something going wrong!';
+        this.isLoading = false;
+      });
     }
   }
 
   getBookById = async (id: string) => {
     this.bookInfo.isLoading = true;
-    const response = await bookApi.getBook(id);
-    this.bookInfo.book = response;
-    this.bookInfo.isLoading = false;
-    this.bookInfo.error = '';
+    try {
+      const response = await bookApi.getBook(id);
+      runInAction(() => {
+        this.bookInfo.book = response;
+        this.bookInfo.isLoading = false;
+        this.bookInfo.error = '';
+      });
+    } catch (error) {
+      runInAction(() => {
+        this.bookInfo.isLoading = false;
+        this.bookInfo.error = 'Something going wrong!';
+      });
+    }
   }
 }
 
