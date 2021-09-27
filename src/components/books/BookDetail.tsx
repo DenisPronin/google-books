@@ -1,7 +1,7 @@
-import {FC} from "react";
+import { FC } from "react";
 import { Col, Row } from 'react-bootstrap';
 import useBookProps from './useBookProps';
-import {GoogleBook} from "../../api/bookApi";
+import { GoogleBook } from "../../api/bookApi";
 
 interface Props {
    book: GoogleBook

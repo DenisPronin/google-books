@@ -1,8 +1,8 @@
-import {FC} from "react";
+import { FC } from "react";
 import { Link } from 'react-router-dom';
 import { Col, Row } from 'react-bootstrap';
 import Book from './Book';
-import {GoogleBook} from "../../api/bookApi";
+import { GoogleBook } from "../../api/bookApi";
 
 interface Props {
   books: Array<GoogleBook>,

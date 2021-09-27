@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import Loader from '../components/common/Loader';
 import BookDetail from '../components/books/BookDetail';
 import Error from '../components/common/Error';
-import BooksStore from "../stores/BooksStore";
+import { useStores } from "../stores";
 
 interface ParamTypes {
   id: string
@@ -12,15 +12,16 @@ interface ParamTypes {
 
 const BookPage = observer(() => {
   const { id } = useParams<ParamTypes>();
-  const { bookInfo: { isLoading, book, error } } = BooksStore;
+  const { booksStore } = useStores();
+  const { bookInfo: { isLoading, book, error } } = booksStore;
 
   const clearError = () => {
-    BooksStore.setBooksInfoError('');
+    booksStore.setBooksInfoError('');
   }
 
   useEffect(() => {
-    BooksStore.getBookById(id);
-  }, [id])
+    booksStore.getBookById(id);
+  }, [booksStore, id])
 
   if (error) {
     return <Error error={error} clearError={clearError} />

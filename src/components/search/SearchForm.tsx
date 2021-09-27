@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { observer } from "mobx-react";
 import { Button, Col, Form, InputGroup, Row } from 'react-bootstrap';
-import SearchFormStore, { ISearchFormOptions } from "../../stores/SearchFormStore";
-import BooksStore from "../../stores/BooksStore";
-import {runInAction} from "mobx";
+import { ISearchFormOptions } from "../../stores/SearchFormStore";
+import { useStores } from "../../stores";
 
 const SearchForm = observer(() => {
-  const { category, searchQuery, sorting } = SearchFormStore;
+  const { searchFormStore, booksStore } = useStores();
+  const { category, searchQuery, sorting } = searchFormStore;
 
   const [localSearchQuery, setLocalSearchQuery] = useState('');
 
@@ -18,18 +18,14 @@ const SearchForm = observer(() => {
   const history = useHistory();
 
   const onSearch = (options: ISearchFormOptions) => {
-    runInAction(() => {
-      SearchFormStore.onChangeSearchForm(options);
-    });
-    runInAction(() => {
-      BooksStore.clearBooks();
-      BooksStore.getBooks(SearchFormStore.searchQuery, SearchFormStore.category, SearchFormStore.sorting)
-        .then(() => {
-          if (history.location.pathname !== '/') {
-            history.push('/');
-          }
-        });
-    });
+    searchFormStore.onChangeSearchForm(options);
+    booksStore.clearBooks();
+    booksStore.getBooks()
+      .then(() => {
+        if (history.location.pathname !== '/') {
+          history.push('/');
+        }
+      });
   };
 
   const handleChangeForm = (event: React.ChangeEvent<HTMLSelectElement>) => {

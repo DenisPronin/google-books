@@ -1,4 +1,5 @@
-import {makeAutoObservable} from "mobx";
+import { makeAutoObservable } from "mobx";
+import { IRootStore } from "./index";
 
 export interface ISearchFormOptions {
   searchQuery?: string;
@@ -10,15 +11,18 @@ export interface ISearchFormStore {
   searchQuery: string;
   category: string;
   sorting: string;
+  onChangeSearchForm: Function;
 }
 
-class SearchForm implements ISearchFormStore {
+class SearchFormStore implements ISearchFormStore {
 
+  root: IRootStore;
   searchQuery = '';
   category = '';
   sorting = 'relevance';
 
-  constructor () {
+  constructor (root: IRootStore) {
+    this.root = root;
     makeAutoObservable(this);
   }
 
@@ -29,7 +33,5 @@ class SearchForm implements ISearchFormStore {
     });
   }
 }
-
-const SearchFormStore = new SearchForm();
 
 export default SearchFormStore;

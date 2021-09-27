@@ -3,19 +3,18 @@ import { Button } from 'react-bootstrap';
 import BooksList from '../components/books/BooksList';
 import Loader from '../components/common/Loader';
 import Error from '../components/common/Error';
-import BooksStore from "../stores/BooksStore";
-import SearchFormStore from "../stores/SearchFormStore";
+import { useStores } from "../stores";
 
 const HomePage = observer(() => {
-  const { books, total, isLoading, searchError } = BooksStore;
-  const { category, searchQuery, sorting } = SearchFormStore;
+  const { booksStore } = useStores();
+  const { books, total, isLoading, searchError } = booksStore;
 
   const loadMore = () => {
-    BooksStore.getBooks(searchQuery, category, sorting);
+    booksStore.getBooks();
   }
 
   const onClearSearchError = () => {
-    BooksStore.setSearchError('');
+    booksStore.setSearchError('');
   };
 
   if (searchError) {

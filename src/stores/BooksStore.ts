@@ -1,5 +1,6 @@
-import {makeAutoObservable, runInAction} from "mobx";
-import bookApi, {GoogleBook, GoogleBooks} from "../api/bookApi";
+import { makeAutoObservable, runInAction } from "mobx";
+import bookApi, { GoogleBook, GoogleBooks } from "../api/bookApi";
+import { IRootStore } from "./index";
 
 interface IBookInfo {
   isLoading: boolean,
@@ -7,16 +8,23 @@ interface IBookInfo {
   error: string
 }
 
-export interface IBooks {
-  searchError: string,
-  isLoading: boolean,
-  books: Array<GoogleBook>,
-  total: number,
-  bookInfo: IBookInfo
+export interface IBooksStore {
+  searchError: string;
+  isLoading: boolean;
+  books: Array<GoogleBook>;
+  total: number;
+  bookInfo: IBookInfo;
+
+  clearBooks: Function;
+  getBooks: Function;
+  setSearchError: Function;
+  setBooksInfoError: Function;
+  getBookById: Function;
 }
 
-class Books implements IBooks {
+class BooksStore implements IBooksStore {
 
+  root: IRootStore;
   searchError = '';
   isLoading = false;
   books: Array<GoogleBook> = [];
@@ -28,7 +36,8 @@ class Books implements IBooks {
     error: ''
   }
 
-  constructor () {
+  constructor (root: IRootStore) {
+    this.root = root;
     makeAutoObservable(this);
   }
 
@@ -44,7 +53,8 @@ class Books implements IBooks {
     this.books = [];
   }
 
-  getBooks = async (searchQuery: string, category: string, sorting: string) => {
+  getBooks = async () => {
+    const { searchQuery, category, sorting } = this.root.searchFormStore
     if (searchQuery === '') {
       this.searchError = 'Search query is required!';
       return false;
@@ -95,7 +105,5 @@ class Books implements IBooks {
     }
   }
 }
-
-const BooksStore = new Books();
 
 export default BooksStore;
