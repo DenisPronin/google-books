@@ -7,7 +7,8 @@ import { useStores } from "../../stores";
 
 const SearchForm = observer(() => {
   const { searchFormStore, booksStore } = useStores();
-  const { category, searchQuery, sorting } = searchFormStore;
+  const { category, searchQuery, sorting, onChangeSearchForm } = searchFormStore;
+  const { clearBooks, getBooks } = booksStore;
 
   const [localSearchQuery, setLocalSearchQuery] = useState('');
 
@@ -18,9 +19,9 @@ const SearchForm = observer(() => {
   const history = useHistory();
 
   const onSearch = (options: ISearchFormOptions) => {
-    searchFormStore.onChangeSearchForm(options);
-    booksStore.clearBooks();
-    booksStore.getBooks()
+    onChangeSearchForm(options);
+    clearBooks();
+    getBooks()
       .then(() => {
         if (history.location.pathname !== '/') {
           history.push('/');

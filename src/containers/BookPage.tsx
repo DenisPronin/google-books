@@ -13,15 +13,19 @@ interface ParamTypes {
 const BookPage = observer(() => {
   const { id } = useParams<ParamTypes>();
   const { booksStore } = useStores();
-  const { bookInfo: { isLoading, book, error } } = booksStore;
+  const {
+    bookInfo: { isLoading, book, error },
+    setBooksInfoError,
+    getBookById
+  } = booksStore;
 
   const clearError = () => {
-    booksStore.setBooksInfoError('');
+    setBooksInfoError('');
   }
 
   useEffect(() => {
-    booksStore.getBookById(id);
-  }, [booksStore, id])
+    getBookById(id);
+  }, [getBookById, id])
 
   if (error) {
     return <Error error={error} clearError={clearError} />

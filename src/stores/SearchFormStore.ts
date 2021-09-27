@@ -26,7 +26,7 @@ class SearchFormStore implements ISearchFormStore {
     makeAutoObservable(this);
   }
 
-  onChangeSearchForm (options: ISearchFormOptions) {
+  onChangeSearchForm = (options: ISearchFormOptions) => {
     Object.entries(options).forEach(([_key, value]) => {
       const key = _key as keyof typeof options;
       this[key] = value;

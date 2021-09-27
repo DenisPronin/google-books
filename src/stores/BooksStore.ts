@@ -41,15 +41,15 @@ class BooksStore implements IBooksStore {
     makeAutoObservable(this);
   }
 
-  setSearchError (searchError: string) {
+  setSearchError = (searchError: string) => {
     this.searchError = searchError;
   }
 
-  setBooksInfoError (error: string) {
+  setBooksInfoError = (error: string) => {
     this.bookInfo.error = error;
   }
 
-  clearBooks () {
+  clearBooks = () => {
     this.books = [];
   }
 
