@@ -15,11 +15,11 @@ export interface IBooksStore {
   total: number;
   bookInfo: IBookInfo;
 
-  clearBooks: Function;
-  getBooks: Function;
-  setSearchError: Function;
-  setBooksInfoError: Function;
-  getBookById: Function;
+  clearBooks: () => void;
+  getBooks: () => Promise<GoogleBooks | void>;
+  setSearchError: (error: string) => void;
+  setBooksInfoError: (error: string) => void;
+  getBookById: (id: string) => void;
 }
 
 class BooksStore implements IBooksStore {
@@ -41,8 +41,8 @@ class BooksStore implements IBooksStore {
     makeAutoObservable(this);
   }
 
-  setSearchError = (searchError: string) => {
-    this.searchError = searchError;
+  setSearchError = (error: string) => {
+    this.searchError = error;
   }
 
   setBooksInfoError = (error: string) => {
@@ -57,7 +57,7 @@ class BooksStore implements IBooksStore {
     const { searchQuery, category, sorting } = this.root.searchFormStore
     if (searchQuery === '') {
       this.searchError = 'Search query is required!';
-      return false;
+      return Promise.reject();
     }
 
     this.isLoading = true;
@@ -85,6 +85,8 @@ class BooksStore implements IBooksStore {
         this.searchError = 'Something going wrong!';
         this.isLoading = false;
       });
+
+      return Promise.reject();
     }
   }
 
